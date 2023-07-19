@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\MicroserviceArch.Dal.PGSQL\MicroserviceArch.Dal.PGSQL.csproj" />
     <ProjectReference Include="..\..\Data\MicroserviceArch.DAL\MicroserviceArch.DAL.csproj" />
+    <ProjectReference Include="..\..\Middleware\MicroserviceArch.InitializeDB\MicroserviceArch.InitializeDB.csproj" />
   </ItemGroup>
 
 </Project>

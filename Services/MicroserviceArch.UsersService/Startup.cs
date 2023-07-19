@@ -1,4 +1,5 @@
 using MicroserviceArch.DAL.Context;
+using MicroserviceArch.InitializeDB;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -32,11 +33,15 @@ namespace MicroserviceArch.UsersService
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MicroserviceArch.UsersService", Version = "v1" });
             });
+
+            services.AddTransient<DataDBInitializer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataDBInitializer db)
         {
+            db.Initialize();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
