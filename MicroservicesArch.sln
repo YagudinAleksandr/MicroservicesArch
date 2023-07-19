@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroserviceArch.BankUI", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroserviceArch.Dal.PGSQL", "Data\MicroserviceArch.Dal.PGSQL\MicroserviceArch.Dal.PGSQL.csproj", "{065BAD41-E1A3-453A-9709-90A8EE75B2F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroserviceArch.DTOEntity", "Infrastructure\MicroserviceArch.DTOEntity\MicroserviceArch.DTOEntity.csproj", "{DFA7E7AF-A97F-42FB-A3BD-8FC74CC9EC1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{065BAD41-E1A3-453A-9709-90A8EE75B2F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{065BAD41-E1A3-453A-9709-90A8EE75B2F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{065BAD41-E1A3-453A-9709-90A8EE75B2F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFA7E7AF-A97F-42FB-A3BD-8FC74CC9EC1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFA7E7AF-A97F-42FB-A3BD-8FC74CC9EC1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFA7E7AF-A97F-42FB-A3BD-8FC74CC9EC1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFA7E7AF-A97F-42FB-A3BD-8FC74CC9EC1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +93,7 @@ Global
 		{1C56EDB9-0D75-48B0-B54E-7AF9B5C6C86A} = {A8360D6D-9054-4D49-9AA8-4321CDA3ED79}
 		{EB994D84-7636-4608-9302-FA0CF69DB499} = {A8360D6D-9054-4D49-9AA8-4321CDA3ED79}
 		{065BAD41-E1A3-453A-9709-90A8EE75B2F8} = {D28E49FD-5FA6-4B13-8977-B20606C4DD3E}
+		{DFA7E7AF-A97F-42FB-A3BD-8FC74CC9EC1F} = {88F4D038-05E8-4A3E-9255-9D5162672C2E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37D1B953-AAF0-443F-A61E-3B97091230D7}
