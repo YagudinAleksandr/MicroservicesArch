@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System;
 using MicroserviceArch.DAL.Entities;
-using Microsoft.EntityFrameworkCore
+using Microsoft.EntityFrameworkCore;
 
 namespace MicroserviceArch.InitializeDB
 {
