@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\MicroserviceArch.Interfaces\MicroserviceArch.Interfaces.csproj" />
   </ItemGroup>
 
