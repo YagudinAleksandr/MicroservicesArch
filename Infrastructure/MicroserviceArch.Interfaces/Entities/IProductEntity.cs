@@ -5,7 +5,7 @@ namespace MicroserviceArch.Interfaces.Entities
     /// <summary>
     /// Интерфейс сущности продукции
     /// </summary>
-    internal interface IProductEntity : IBaseEntity
+    public interface IProductEntity : IBaseEntity
     {
         /// <summary>
         /// Название
