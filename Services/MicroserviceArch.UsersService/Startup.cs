@@ -31,6 +31,7 @@ namespace MicroserviceArch.UsersService
             );
 
             services.AddScoped(typeof(IRoleRepository<>), typeof(RoleRepository<>));
+            services.AddScoped(typeof(IClientRepository<>), typeof(ClientRepository<>));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
