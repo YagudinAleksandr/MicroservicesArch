@@ -17,8 +17,8 @@ namespace MicroserviceArch.Pagination.Entities
         /// </summary>
         public DateTime endDate { get; set; } = default;
         /// <summary>
-        /// Тип сортировки
+        /// Тип сортировки (0 - по дате, 1 - по возрастанию, 2 - по убыванию)
         /// </summary>
-        public bool IsSortStandart { get; set; } = default;
+        public int IsSortStandart { get; set; } = 0;
     }
 }
