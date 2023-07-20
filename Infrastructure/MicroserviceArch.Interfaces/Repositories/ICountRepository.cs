@@ -25,13 +25,14 @@ namespace MicroserviceArch.Interfaces.Repositories
         /// <param name="cancel">Отмена</param>
         /// <returns>Список сущностей</returns>
         Task<List<T>> GetAllByUser(int userId, CancellationToken cancel = default);
+        
         /// <summary>
-        /// Проверка наличия счета
+        /// Существует ли счет
         /// </summary>
-        /// <param name="clientId">ID клиента</param>
+        /// <param name="countId">ID счета</param>
         /// <param name="cancel">Токен отмены</param>
-        /// <returns>True - счет существует, False - отсутствует</returns>
-        Task<bool> ExsistCount(int clientId, CancellationToken cancel = default);
+        /// <returns>True - существует, False - нет</returns>
+        Task<bool> ExsistCount(int countId, CancellationToken cancel = default);
         /// <summary>
         /// Проверка состоятельности счета
         /// </summary>
@@ -39,5 +40,12 @@ namespace MicroserviceArch.Interfaces.Repositories
         /// <param name="cancel">Токен отмены</param>
         /// <returns>True - возможность совершить операцию, Fals - нет возможности на счете</returns>
         Task<bool> CheckBalanceForTransaction(int countId, CancellationToken cancel = default);
+        /// <summary>
+        /// Проверка наличия счетов у клиента
+        /// </summary>
+        /// <param name="clientId">ID клиента</param>
+        /// <param name="cancel">Токен отмены</param>
+        /// <returns>True - существует, False - нет</returns>
+        Task<bool> ExistsCounts(int clientId, CancellationToken cancel = default);
     }
 }
