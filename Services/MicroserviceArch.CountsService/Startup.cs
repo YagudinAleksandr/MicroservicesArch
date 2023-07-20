@@ -34,6 +34,7 @@ namespace MicroserviceArch.CountsService
             string urlToCurrencyConverter = $"https://api.exchangeratesapi.io/v1/latest?access_key={Configuration.GetSection("AccessKeyToExchangeratesapi").Value}";
 
             services.AddScoped(typeof(ICountRepository<>), typeof(CountRepository<>));
+            services.AddScoped(typeof(ITransactionRepository<>), typeof(TransactionRepository<>));
             services.AddScoped(sp => new HttpClient() { BaseAddress = new System.Uri(urlToCurrencyConverter) });
 
             services.AddControllers();
