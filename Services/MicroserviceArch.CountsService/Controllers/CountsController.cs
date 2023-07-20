@@ -1,11 +1,13 @@
 ﻿using MicroserviceArch.DAL.Entities;
+using MicroserviceArch.DAL.Repositories;
 using MicroserviceArch.DTOEntity;
 using MicroserviceArch.Interfaces.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace MicroserviceArch.CountsService.Controllers
@@ -18,8 +20,13 @@ namespace MicroserviceArch.CountsService.Controllers
     public class CountsController : ControllerBase
     {
         private readonly ICountRepository<CountEntity> repository;
+        private readonly HttpClient client;
 
-        public CountsController(ICountRepository<CountEntity> repository) => this.repository = repository;
+        public CountsController(ICountRepository<CountEntity> repository, HttpClient client)
+        {
+            this.repository = repository;
+            this.client = client;
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -43,25 +50,42 @@ namespace MicroserviceArch.CountsService.Controllers
             return Ok(counts);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("count")]
+        public async Task<IActionResult> Get([FromQuery]CountEntityRequestCountDTO countEntity)
         {
-            var count = await repository.Get(id);
-
-            if (count is null) return NotFound(new CountEntityDTO { IsSuccessful = false, Notification = "Запись не найдена" });
-
-            CountEntityDTO countEntityDTO = new CountEntityDTO
+            try
             {
-                IsSuccessful = true,
-                Id = count.Id,
-                Count = count.Count,
-                Client = count.Client.Name,
-                CreatedAt = count.CreatedAt,
-                UpdatedAt = count.UpdatedAt,
-                ClientId=count.Client.Id
-            };
+                var count = await repository.Get(countEntity.Id);
 
-            return Ok(countEntityDTO);
+                if (count is null) return NotFound(new CountEntityDTO { IsSuccessful = false, Notification = "Запись не найдена" });
+
+                CountEntityDTO countEntityDTO = new CountEntityDTO
+                {
+                    IsSuccessful = true,
+                    Id = count.Id,
+                    Count = count.Count,
+                    Client = count.Client.Name,
+                    CreatedAt = count.CreatedAt,
+                    UpdatedAt = count.UpdatedAt,
+                    ClientId = count.Client.Id
+                };
+
+                if(!string.IsNullOrEmpty(countEntity.Currency) && countEntity.Currency!="RUB")
+                {
+                    var res = await client.GetFromJsonAsync<CurrencyRateDTO>($"&from=RUB&to={countEntity.Currency}&amount={countEntityDTO.Count}");
+
+                    if(res.Success)
+                        countEntityDTO.Count = res.Result;
+                    else
+                        countEntityDTO.Notification = $"Не удалось преобразовать счет в {countEntity.Currency}";
+                }
+
+                return Ok(countEntityDTO);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new CountEntityDTO { IsSuccessful = false, Notification = $"{ex.Message}" });
+            }
         }
 
         [HttpGet("/client-counts/{id}")]
