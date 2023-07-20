@@ -11,19 +11,16 @@ namespace MicroserviceArch.DAL.Entities
         public int Id { get; set; }
         [Required]
         public double Sum { get; set; }
-        public bool IsComing { get; set; }
         [ForeignKey("CountEntity")]
         public int CountId { get; set; }
         public CountEntity Count { get; set; }
-        [ForeignKey("ClientEntity")]
-        public int? ClientSenderId { get; set; }
-        public ClientEntity ClientSender { get; set; }
-        [ForeignKey("ClientEntity")]
-        public int? ClientReciverId { get; set; }
-        public ClientEntity ClientReciver { get; set; }
+        [ForeignKey("CountEntity")]
+        public int CountReciverId { get; set; }
+        public CountEntity CountReciver { get; set; }
         [Required]
         public string Description { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset UpdatedAt { get; set; }
+        
     }
 }

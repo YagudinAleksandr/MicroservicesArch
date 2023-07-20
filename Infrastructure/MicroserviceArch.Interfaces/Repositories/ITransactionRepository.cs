@@ -13,17 +13,12 @@ namespace MicroserviceArch.Interfaces.Repositories
     public interface ITransactionRepository<T> : IBaseRepository<T> where T : ITransactionEntity
     {
         /// <summary>
-        /// Получение всех записей по счету
+        /// Получение всех отсортированных (по дате) записей по счету
         /// </summary>
-        /// <param name="countId">ID счета</param>
+        /// <param name="countId">Id счета</param>
         /// <param name="cancel">Токен отмены</param>
-        /// <returns>Список</returns>
+        /// <returns>Отсортированный список</returns>
         Task<List<T>> GetAllByCount(int countId, CancellationToken cancel = default);
-        /// <summary>
-        /// Получение всех транакций
-        /// </summary>
-        /// <param name="cancel">Токен отмены</param>
-        /// <returns>Список</returns>
-        Task<List<T>> GetAll(CancellationToken cancel = default);
+        
     }
 }
