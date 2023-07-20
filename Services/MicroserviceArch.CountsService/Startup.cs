@@ -1,5 +1,7 @@
 using MicroserviceArch.DAL.Context;
+using MicroserviceArch.DAL.Repositories;
 using MicroserviceArch.InitializeDB;
+using MicroserviceArch.Interfaces.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +29,8 @@ namespace MicroserviceArch.CountsService
                 .GetConnectionString("VehicleQuotesContext"), m => m.MigrationsAssembly("MicroserviceArch.Dal.PGSQL"))
                 .UseSnakeCaseNamingConvention()
             );
+
+            services.AddScoped(typeof(ICountRepository<>), typeof(CountRepository<>));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
