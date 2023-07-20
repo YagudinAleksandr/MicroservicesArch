@@ -71,32 +71,6 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "products",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
-                    client_id = table.Column<string>(type: "text", nullable: true),
-                    client_id1 = table.Column<int>(type: "integer", nullable: true),
-                    price = table.Column<double>(type: "double precision", nullable: false),
-                    amount = table.Column<string>(type: "text", nullable: false),
-                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_products", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_products_clients_client_id1",
-                        column: x => x.client_id1,
-                        principalTable: "clients",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "transactions",
                 columns: table => new
                 {
@@ -145,11 +119,6 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
                 column: "client_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_products_client_id1",
-                table: "products",
-                column: "client_id1");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_transactions_client_reciver_id",
                 table: "transactions",
                 column: "client_reciver_id");
@@ -167,9 +136,6 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "products");
-
             migrationBuilder.DropTable(
                 name: "transactions");
 

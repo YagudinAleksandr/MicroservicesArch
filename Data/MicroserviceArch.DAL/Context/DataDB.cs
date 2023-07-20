@@ -23,9 +23,5 @@ namespace MicroserviceArch.DAL.Context
         /// Транзакции
         /// </summary>
         public DbSet<TransactionEntity> Transactions { get; set; }
-        /// <summary>
-        /// Услуги/товары
-        /// </summary>
-        public DbSet<ProductEntity> Products { get; set; }
     }
 }

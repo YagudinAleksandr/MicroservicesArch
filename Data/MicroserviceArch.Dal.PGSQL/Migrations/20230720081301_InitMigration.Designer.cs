@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MicroserviceArch.Dal.PGSQL.Migrations
 {
     [DbContext(typeof(DataDB))]
-    [Migration("20230719144455_InitMigration")]
+    [Migration("20230720081301_InitMigration")]
     partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,58 +96,6 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
                         .HasDatabaseName("ix_counts_client_id");
 
                     b.ToTable("counts");
-                });
-
-            modelBuilder.Entity("MicroserviceArch.DAL.Entities.ProductEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Amount")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("amount");
-
-                    b.Property<string>("ClientId")
-                        .HasColumnType("text")
-                        .HasColumnName("client_id");
-
-                    b.Property<int?>("ClientId1")
-                        .HasColumnType("integer")
-                        .HasColumnName("client_id1");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("double precision")
-                        .HasColumnName("price");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
-
-                    b.HasKey("Id")
-                        .HasName("pk_products");
-
-                    b.HasIndex("ClientId1")
-                        .HasDatabaseName("ix_products_client_id1");
-
-                    b.ToTable("products");
                 });
 
             modelBuilder.Entity("MicroserviceArch.DAL.Entities.RoleEntity", b =>
@@ -258,16 +206,6 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
                         .HasConstraintName("fk_counts_clients_client_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
-            modelBuilder.Entity("MicroserviceArch.DAL.Entities.ProductEntity", b =>
-                {
-                    b.HasOne("MicroserviceArch.DAL.Entities.ClientEntity", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId1")
-                        .HasConstraintName("fk_products_clients_client_id1");
 
                     b.Navigation("Client");
                 });
