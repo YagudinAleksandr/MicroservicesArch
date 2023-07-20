@@ -39,7 +39,7 @@ namespace MicroserviceArch.Interfaces.Repositories
         /// <param name="countId">ID счета</param>
         /// <param name="cancel">Токен отмены</param>
         /// <returns>True - возможность совершить операцию, Fals - нет возможности на счете</returns>
-        Task<bool> CheckBalanceForTransaction(int countId, CancellationToken cancel = default);
+        Task<bool> CheckBalanceForTransaction(int countId, double sum, CancellationToken cancel = default);
         /// <summary>
         /// Проверка наличия счетов у клиента
         /// </summary>
