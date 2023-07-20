@@ -79,8 +79,7 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
                     sum = table.Column<double>(type: "double precision", nullable: false),
                     is_coming = table.Column<bool>(type: "boolean", nullable: false),
                     count_id = table.Column<int>(type: "integer", nullable: false),
-                    client_sender_id = table.Column<int>(type: "integer", nullable: true),
-                    client_reciver_id = table.Column<int>(type: "integer", nullable: true),
+                    count_reciver_id = table.Column<int>(type: "integer", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
@@ -89,20 +88,14 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
                 {
                     table.PrimaryKey("pk_transactions", x => x.id);
                     table.ForeignKey(
-                        name: "fk_transactions_clients_client_reciver_id",
-                        column: x => x.client_reciver_id,
-                        principalTable: "clients",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "fk_transactions_clients_client_sender_id",
-                        column: x => x.client_sender_id,
-                        principalTable: "clients",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "fk_transactions_counts_count_id",
                         column: x => x.count_id,
+                        principalTable: "counts",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_transactions_counts_count_reciver_id",
+                        column: x => x.count_reciver_id,
                         principalTable: "counts",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -119,19 +112,14 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
                 column: "client_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_transactions_client_reciver_id",
-                table: "transactions",
-                column: "client_reciver_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_transactions_client_sender_id",
-                table: "transactions",
-                column: "client_sender_id");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_transactions_count_id",
                 table: "transactions",
                 column: "count_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_transactions_count_reciver_id",
+                table: "transactions",
+                column: "count_reciver_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

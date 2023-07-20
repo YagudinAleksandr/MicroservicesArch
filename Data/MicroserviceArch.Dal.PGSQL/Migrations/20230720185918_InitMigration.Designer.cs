@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MicroserviceArch.Dal.PGSQL.Migrations
 {
     [DbContext(typeof(DataDB))]
-    [Migration("20230720081301_InitMigration")]
+    [Migration("20230720185918_InitMigration")]
     partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -138,17 +138,13 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("ClientReciverId")
-                        .HasColumnType("integer")
-                        .HasColumnName("client_reciver_id");
-
-                    b.Property<int?>("ClientSenderId")
-                        .HasColumnType("integer")
-                        .HasColumnName("client_sender_id");
-
                     b.Property<int>("CountId")
                         .HasColumnType("integer")
                         .HasColumnName("count_id");
+
+                    b.Property<int>("CountReciverId")
+                        .HasColumnType("integer")
+                        .HasColumnName("count_reciver_id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -174,14 +170,11 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
                     b.HasKey("Id")
                         .HasName("pk_transactions");
 
-                    b.HasIndex("ClientReciverId")
-                        .HasDatabaseName("ix_transactions_client_reciver_id");
-
-                    b.HasIndex("ClientSenderId")
-                        .HasDatabaseName("ix_transactions_client_sender_id");
-
                     b.HasIndex("CountId")
                         .HasDatabaseName("ix_transactions_count_id");
+
+                    b.HasIndex("CountReciverId")
+                        .HasDatabaseName("ix_transactions_count_reciver_id");
 
                     b.ToTable("transactions");
                 });
@@ -212,16 +205,6 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
 
             modelBuilder.Entity("MicroserviceArch.DAL.Entities.TransactionEntity", b =>
                 {
-                    b.HasOne("MicroserviceArch.DAL.Entities.ClientEntity", "ClientReciver")
-                        .WithMany()
-                        .HasForeignKey("ClientReciverId")
-                        .HasConstraintName("fk_transactions_clients_client_reciver_id");
-
-                    b.HasOne("MicroserviceArch.DAL.Entities.ClientEntity", "ClientSender")
-                        .WithMany()
-                        .HasForeignKey("ClientSenderId")
-                        .HasConstraintName("fk_transactions_clients_client_sender_id");
-
                     b.HasOne("MicroserviceArch.DAL.Entities.CountEntity", "Count")
                         .WithMany()
                         .HasForeignKey("CountId")
@@ -229,11 +212,16 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ClientReciver");
-
-                    b.Navigation("ClientSender");
+                    b.HasOne("MicroserviceArch.DAL.Entities.CountEntity", "CountReciver")
+                        .WithMany()
+                        .HasForeignKey("CountReciverId")
+                        .HasConstraintName("fk_transactions_counts_count_reciver_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Count");
+
+                    b.Navigation("CountReciver");
                 });
 #pragma warning restore 612, 618
         }
