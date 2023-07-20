@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroserviceArch.DTOEntity"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroserviceArch.InitializeDB", "Middleware\MicroserviceArch.InitializeDB\MicroserviceArch.InitializeDB.csproj", "{BDC9E9B1-EB1C-4151-93A5-1B49C0A02340}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroserviceArch.Pagination", "Infrastructure\MicroserviceArch.Pagination\MicroserviceArch.Pagination.csproj", "{29F6C849-882B-4467-9142-385EE87F8CD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{BDC9E9B1-EB1C-4151-93A5-1B49C0A02340}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDC9E9B1-EB1C-4151-93A5-1B49C0A02340}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDC9E9B1-EB1C-4151-93A5-1B49C0A02340}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29F6C849-882B-4467-9142-385EE87F8CD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29F6C849-882B-4467-9142-385EE87F8CD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29F6C849-882B-4467-9142-385EE87F8CD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29F6C849-882B-4467-9142-385EE87F8CD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +93,7 @@ Global
 		{065BAD41-E1A3-453A-9709-90A8EE75B2F8} = {D28E49FD-5FA6-4B13-8977-B20606C4DD3E}
 		{DFA7E7AF-A97F-42FB-A3BD-8FC74CC9EC1F} = {88F4D038-05E8-4A3E-9255-9D5162672C2E}
 		{BDC9E9B1-EB1C-4151-93A5-1B49C0A02340} = {B4CB849A-FD9A-4FD3-99EE-4F62DD358F44}
+		{29F6C849-882B-4467-9142-385EE87F8CD5} = {88F4D038-05E8-4A3E-9255-9D5162672C2E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37D1B953-AAF0-443F-A61E-3B97091230D7}
