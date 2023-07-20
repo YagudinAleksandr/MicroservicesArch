@@ -68,7 +68,7 @@ namespace MicroserviceArch.DAL.Repositories
             await Items.Include(c => c.Count).FirstOrDefaultAsync(item => item.Id == id, cancel).ConfigureAwait(false);
 
         public async Task<List<T>> GetAllByCount(int countId, CancellationToken cancel = default) =>
-            await Items.Where(x => x.CountId == countId).Include(c => c.Count).ToListAsync(cancel).ConfigureAwait(false);
+            await Items.Where(x => x.CountId == countId || x.CountReciverId == countId).Include(c => c.Count).ToListAsync(cancel).ConfigureAwait(false);
            
         public async Task<T> Update(T entity, CancellationToken cancel = default)
         {
