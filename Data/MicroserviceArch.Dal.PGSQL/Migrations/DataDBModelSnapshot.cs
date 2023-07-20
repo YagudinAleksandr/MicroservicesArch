@@ -153,10 +153,6 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("description");
 
-                    b.Property<bool>("IsComing")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_coming");
-
                     b.Property<double>("Sum")
                         .HasColumnType("double precision")
                         .HasColumnName("sum");

@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MicroserviceArch.Dal.PGSQL.Migrations
 {
     [DbContext(typeof(DataDB))]
-    [Migration("20230720185918_InitMigration")]
+    [Migration("20230720210530_InitMigration")]
     partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -154,10 +154,6 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("description");
-
-                    b.Property<bool>("IsComing")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_coming");
 
                     b.Property<double>("Sum")
                         .HasColumnType("double precision")

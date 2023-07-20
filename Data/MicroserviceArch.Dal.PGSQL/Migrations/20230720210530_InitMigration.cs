@@ -77,7 +77,6 @@ namespace MicroserviceArch.Dal.PGSQL.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     sum = table.Column<double>(type: "double precision", nullable: false),
-                    is_coming = table.Column<bool>(type: "boolean", nullable: false),
                     count_id = table.Column<int>(type: "integer", nullable: false),
                     count_reciver_id = table.Column<int>(type: "integer", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
