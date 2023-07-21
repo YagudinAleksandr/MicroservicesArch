@@ -107,12 +107,14 @@ namespace MicroserviceArch.CountsService.Controllers
                 messageDTO.Message = $"Списание средств. {entityDTO.Description}. Сумма: {entityDTO.Sum}. Баланс: {senderCount.Count}";
                 messageDTO.Type = $"Transaction";
                 messageDTO.ClientID = senderCount.ClientId;
+                messageDTO.CreatedAt = transaction.CreatedAt;
                 await rabbitMQ.SendMessageAsync(messageDTO);
 
                 //Отправка уведомления получателю
                 messageDTO.Message = $"Зачисление средств. {entityDTO.Description}. Сумма: {entityDTO.Sum}. Баланс: {reciveCount.Count}";
                 messageDTO.Type = $"Transaction";
                 messageDTO.ClientID = reciveCount.ClientId;
+                messageDTO.CreatedAt = transaction.CreatedAt;
                 await rabbitMQ.SendMessageAsync(messageDTO);
 
                 return Ok(entityDTO);

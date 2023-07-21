@@ -1,4 +1,6 @@
-﻿namespace MicroserviceArch.RabbitMQ
+﻿using System;
+
+namespace MicroserviceArch.RabbitMQ
 {
     public class MessageDTO
     {
@@ -18,5 +20,9 @@
         /// Хост RabbitMQ
         /// </summary>
         public string Host { get; set; }
+        /// <summary>
+        /// Дата сообщения
+        /// </summary>
+        public DateTimeOffset CreatedAt { get; set; }
     }
 }
