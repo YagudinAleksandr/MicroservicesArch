@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\Infrastructure\MicroserviceArch.DTOEntity\MicroserviceArch.DTOEntity.csproj" />
     <ProjectReference Include="..\..\Infrastructure\MicroserviceArch.Pagination\MicroserviceArch.Pagination.csproj" />
     <ProjectReference Include="..\..\Middleware\MicroserviceArch.InitializeDB\MicroserviceArch.InitializeDB.csproj" />
+    <ProjectReference Include="..\..\Middleware\MicroserviceArch.RabbitMQ\MicroserviceArch.RabbitMQ.csproj" />
   </ItemGroup>
 
 </Project>

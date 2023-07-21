@@ -2,6 +2,7 @@ using MicroserviceArch.DAL.Context;
 using MicroserviceArch.DAL.Repositories;
 using MicroserviceArch.InitializeDB;
 using MicroserviceArch.Interfaces.Repositories;
+using MicroserviceArch.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,7 @@ namespace MicroserviceArch.CountsService
             services.AddScoped(typeof(ICountRepository<>), typeof(CountRepository<>));
             services.AddScoped(typeof(ITransactionRepository<>), typeof(TransactionRepository<>));
             services.AddScoped(sp => new HttpClient() { BaseAddress = new System.Uri(urlToCurrencyConverter) });
+            services.AddScoped<IRabbitMqService, RabbitMqService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

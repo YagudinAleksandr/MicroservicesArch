@@ -7,6 +7,8 @@ using System;
 using System.Threading.Tasks;
 using MicroserviceArch.Pagination.Entities;
 using System.Collections.Generic;
+using MicroserviceArch.RabbitMQ;
+using Microsoft.Extensions.Configuration;
 
 namespace MicroserviceArch.CountsService.Controllers
 {
@@ -19,11 +21,18 @@ namespace MicroserviceArch.CountsService.Controllers
     {
         private readonly ITransactionRepository<TransactionEntity> repository;
         private readonly ICountRepository<CountEntity> countRepository;
+        private readonly IRabbitMqService rabbitMQ;
+        private readonly IConfiguration configuration;
+        private readonly IConfigurationSection configurationSection;
 
-        public TransactionsController(ITransactionRepository<TransactionEntity> repository, ICountRepository<CountEntity> countRepository)
+        public TransactionsController(ITransactionRepository<TransactionEntity> repository, ICountRepository<CountEntity> countRepository,
+            IRabbitMqService rabbitMQ, IConfiguration configuration)
         {
             this.repository = repository;
             this.countRepository = countRepository;
+            this.rabbitMQ = rabbitMQ;
+            this.configuration = configuration;
+            this.configurationSection = this.configuration.GetSection("RebbitMQServerHost");
         }
 
         [HttpPost]
@@ -39,13 +48,20 @@ namespace MicroserviceArch.CountsService.Controllers
                     return BadRequest(new TransactionEntityDTO { IsSuccessful = false, Notification = $"{errors}" });
                 }
 
-                if (!await countRepository.CheckBalanceForTransaction(entityDTO.CountId, entityDTO.Sum))
-                    return BadRequest(new TransactionEntityDTO { IsSuccessful = false, Notification = "Недостаточно средств на счету для перевода" });
-
                 var senderCount = await countRepository.Get(entityDTO.CountId);
                 var reciveCount = await countRepository.Get(entityDTO.CountReciverId);
 
-                if (reciveCount == null) return BadRequest(new TransactionEntityDTO { IsSuccessful = false, Notification = "Не найден счет получателя" });
+                if (!await countRepository.CheckBalanceForTransaction(entityDTO.CountId, entityDTO.Sum))
+                {
+                    await rabbitMQ.SendMessageAsync("Недостаточно средств на счету для перевода", $"TransactionPart{senderCount.ClientId}", configurationSection.Value);
+                    return BadRequest(new TransactionEntityDTO { IsSuccessful = false, Notification = "Недостаточно средств на счету для перевода" });
+                }
+
+                if (reciveCount == null) 
+                {
+                    await rabbitMQ.SendMessageAsync("Не найден счет получателя", $"TransactionPart{senderCount.ClientId}", configurationSection.Value);
+                    return BadRequest(new TransactionEntityDTO { IsSuccessful = false, Notification = "Не найден счет получателя" });
+                }
 
                 TransactionEntity transactionEntity = new TransactionEntity
                 {
@@ -73,6 +89,8 @@ namespace MicroserviceArch.CountsService.Controllers
                     senderCount = await countRepository.Update(senderCount);
                     reciveCount = await countRepository.Update(reciveCount);
 
+                    await rabbitMQ.SendMessageAsync("Возникла ошибка при переводе средств! Повторите попытку позже!", $"TransactionPart{senderCount.ClientId}", configurationSection.Value);
+
                     return BadRequest(new TransactionEntityDTO() { IsSuccessful = false, Notification = "Возникла ошибка при переводе средств! Повторите попытку позже!" });
                 }
 
@@ -80,6 +98,9 @@ namespace MicroserviceArch.CountsService.Controllers
                 entityDTO.CreatedAt = transaction.CreatedAt;
                 entityDTO.UpdatedAt = transaction.UpdatedAt;
                 entityDTO.Description = transaction.Description;
+
+                await rabbitMQ.SendMessageAsync($"Списание средств. {entityDTO.Description}. Сумма: {entityDTO.Sum}. Баланс: {senderCount.Count}" , $"TransactionPart{senderCount.ClientId}", configurationSection.Value);
+                await rabbitMQ.SendMessageAsync($"Зачисление средств. {entityDTO.Description}. Сумма: {entityDTO.Sum}. Баланс: {reciveCount.Count}", $"TransactionPart{reciveCount.ClientId}", configurationSection.Value);
 
                 return Ok(entityDTO);
             }
