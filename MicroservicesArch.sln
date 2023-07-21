@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroserviceArch.Pagination
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroserviceArch.RabbitMQ", "Middleware\MicroserviceArch.RabbitMQ\MicroserviceArch.RabbitMQ.csproj", "{C1ABA17E-0832-4E4F-9072-F745983D427A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroserviceArch.MessageService", "MicroserviceArch.MessageService\MicroserviceArch.MessageService.csproj", "{585BD301-96BA-465B-8564-400A34C42F78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{C1ABA17E-0832-4E4F-9072-F745983D427A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1ABA17E-0832-4E4F-9072-F745983D427A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1ABA17E-0832-4E4F-9072-F745983D427A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{585BD301-96BA-465B-8564-400A34C42F78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{585BD301-96BA-465B-8564-400A34C42F78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{585BD301-96BA-465B-8564-400A34C42F78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{585BD301-96BA-465B-8564-400A34C42F78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +91,7 @@ Global
 		{BDC9E9B1-EB1C-4151-93A5-1B49C0A02340} = {B4CB849A-FD9A-4FD3-99EE-4F62DD358F44}
 		{29F6C849-882B-4467-9142-385EE87F8CD5} = {88F4D038-05E8-4A3E-9255-9D5162672C2E}
 		{C1ABA17E-0832-4E4F-9072-F745983D427A} = {B4CB849A-FD9A-4FD3-99EE-4F62DD358F44}
+		{585BD301-96BA-465B-8564-400A34C42F78} = {83462387-6866-4C7F-BD3D-F114D89BA32A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37D1B953-AAF0-443F-A61E-3B97091230D7}
