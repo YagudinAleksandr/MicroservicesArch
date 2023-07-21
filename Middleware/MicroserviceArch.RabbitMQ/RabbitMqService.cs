@@ -1,26 +1,22 @@
 ﻿using RabbitMQ.Client;
 using System.Text;
-using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace MicroserviceArch.RabbitMQ
 {
+    /// <summary>
+    /// Ревлизация
+    /// </summary>
     public class RabbitMqService : IRabbitMqService
     {
-        public void SendMessage(object obj)
+        public void SendMessage(string message, string reciver, string address)
         {
-            var message = JsonSerializer.Serialize(obj);
-            SendMessage(message);
-        }
+            var factory = new ConnectionFactory() { HostName = $"{address}" };
 
-        public void SendMessage(string message)
-        {
-            // Не забудьте вынести значения "localhost" и "MyQueue"
-            // в файл конфигурации
-            var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.QueueDeclare(queue: "MyQueue",
+                channel.QueueDeclare(queue: $"{reciver}",
                                durable: false,
                                exclusive: false,
                                autoDelete: false,
@@ -29,10 +25,14 @@ namespace MicroserviceArch.RabbitMQ
                 var body = Encoding.UTF8.GetBytes(message);
 
                 channel.BasicPublish(exchange: "",
-                               routingKey: "MyQueue",
+                               routingKey: $"{reciver}",
                                basicProperties: null,
                                body: body);
             }
+        }
+        public async Task SendMessageAsync(string message, string reciver, string address)
+        {
+            await Task.Run(() => SendMessage(message, reciver, address));
         }
     }
 }
