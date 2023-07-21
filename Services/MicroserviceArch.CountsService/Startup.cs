@@ -26,6 +26,15 @@ namespace MicroserviceArch.CountsService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(policy =>
+            {
+                policy.AddPolicy("CorsPolicy", opt => opt
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithExposedHeaders("X-Pagination"));
+            });
+
             services.AddDbContext<DataDB>(options =>
             options.UseNpgsql(Configuration
                 .GetConnectionString("VehicleQuotesContext"), m => m.MigrationsAssembly("MicroserviceArch.Dal.PGSQL"))
