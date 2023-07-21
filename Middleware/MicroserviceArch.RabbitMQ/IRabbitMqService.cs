@@ -8,18 +8,15 @@ namespace MicroserviceArch.RabbitMQ
     public interface IRabbitMqService
     {
         /// <summary>
-        /// Отправка сообщений асинхронно
+        /// Асинхронная отправка сообщений в RabbitMQ
         /// </summary>
-        /// <param name="message">Сообщение</param>
-        /// <param name="reciver">Очередь для приема</param>
-        /// <param name="address">Адрес сервера</param>
-        Task SendMessageAsync(string message, string reciver, string address);
+        /// <param name="messageDTO">Модель отправки</param>
+        /// <returns></returns>
+        Task SendMessageAsync(MessageDTO messageDTO);
         /// <summary>
-        /// Отправка сообщений
+        /// Отправка сообщений в RabbitMQ
         /// </summary>
-        /// <param name="message">Сообщение</param>
-        /// <param name="reciver">Очередь для приема</param>
-        /// <param name="address">Адрес сервера</param>
-        void SendMessage(string message, string reciver, string address);
+        /// <param name="messageDTO">Модель отправки</param>
+        void SendMessage(MessageDTO messageDTO);
     }
 }
