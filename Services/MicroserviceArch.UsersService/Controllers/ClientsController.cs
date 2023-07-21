@@ -170,5 +170,25 @@ namespace MicroserviceArch.UsersService.Controllers
                 return BadRequest(new RoleEntityDTO { IsSuccesful = false, Notification = $"{ex.Message}" });
             }
         }
+        [HttpPost("signin")]
+        public async Task<IActionResult> SignIn([FromBody] ClientSignInRequest request)
+        {
+            var client = await repository.GetUser(request.Email, request.Password);
+
+            if (client is null) return NotFound(new ClientEntityDTO { IsSuccesfull = false, Notification = "Запись не найдена" });
+
+            ClientEntityDTO clientEntityDTO = new ClientEntityDTO
+            {
+                IsSuccesfull = true,
+                Id = client.Id,
+                Name = client.Name,
+                CreatedAt = client.CreatedAt,
+                UpdatedAt = client.UpdatedAt,
+                Email = client.Email,
+                RoleId = client.RoleId,
+            };
+
+            return Ok(clientEntityDTO);
+        }
     }
 }
