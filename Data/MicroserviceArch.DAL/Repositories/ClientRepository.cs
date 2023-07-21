@@ -77,5 +77,8 @@ namespace MicroserviceArch.DAL.Repositories
 
             return entity;
         }
+
+        public async Task<T> GetUser(string login, string password, CancellationToken cancel = default) =>
+            await Items.FirstOrDefaultAsync(item => item.Email == login && item.Password == password, cancel).ConfigureAwait(false);
     }
 }

@@ -17,5 +17,13 @@ namespace MicroserviceArch.Interfaces.Repositories
         /// <param name="cancel">Токен отмены</param>
         /// <returns>Список сущностей</returns>
         Task<List<T>> GetAll(CancellationToken cancel = default);
+        /// <summary>
+        /// Метод входа в приложение
+        /// </summary>
+        /// <param name="login">Логин</param>
+        /// <param name="password">Пароль</param>
+        /// <param name="cancel">Отмена</param>
+        /// <returns>Пользователь</returns>
+        Task<T> GetUser(string login, string password, CancellationToken cancel = default);
     }
 }
