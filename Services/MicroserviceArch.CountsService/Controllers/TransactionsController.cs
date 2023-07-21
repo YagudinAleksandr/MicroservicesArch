@@ -38,31 +38,34 @@ namespace MicroserviceArch.CountsService.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] TransactionEntityDTO entityDTO)
         {
+            //Создание модели сообщения
+            MessageDTO messageDTO = new MessageDTO();
+            messageDTO.Host = configurationSection.Value;
+
+            //Проверка на валидность передаваемой модели
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Select(x => x.Value.Errors)
+                           .Where(y => y.Count > 0)
+                           .ToList();
+                return BadRequest(new TransactionEntityDTO { IsSuccessful = false, Notification = $"{errors}" });
+            }
+
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    var errors = ModelState.Select(x => x.Value.Errors)
-                               .Where(y => y.Count > 0)
-                               .ToList();
-                    return BadRequest(new TransactionEntityDTO { IsSuccessful = false, Notification = $"{errors}" });
-                }
-
+                //Получение данных о счетах
                 var senderCount = await countRepository.Get(entityDTO.CountId);
                 var reciveCount = await countRepository.Get(entityDTO.CountReciverId);
 
+                //Если баланс счета списания меньше суммы списания, то запрещаем проведение транзакции
                 if (!await countRepository.CheckBalanceForTransaction(entityDTO.CountId, entityDTO.Sum))
-                {
-                    await rabbitMQ.SendMessageAsync("Недостаточно средств на счету для перевода", $"TransactionPart{senderCount.ClientId}", configurationSection.Value);
                     return BadRequest(new TransactionEntityDTO { IsSuccessful = false, Notification = "Недостаточно средств на счету для перевода" });
-                }
 
+                //Если счет получателя не найден
                 if (reciveCount == null) 
-                {
-                    await rabbitMQ.SendMessageAsync("Не найден счет получателя", $"TransactionPart{senderCount.ClientId}", configurationSection.Value);
                     return BadRequest(new TransactionEntityDTO { IsSuccessful = false, Notification = "Не найден счет получателя" });
-                }
 
+                //Создаем модель транзакции
                 TransactionEntity transactionEntity = new TransactionEntity
                 {
                     Sum = entityDTO.Sum,
@@ -73,14 +76,17 @@ namespace MicroserviceArch.CountsService.Controllers
                     Description = $"Был выполнен перевод со счета {entityDTO.CountId} на счет {entityDTO.CountReciverId}"
                 };
 
+                //Производим расчеты счетов
                 senderCount.Count -= entityDTO.Sum;
                 reciveCount.Count += entityDTO.Sum;
 
                 senderCount = await countRepository.Update(senderCount);
                 reciveCount = await countRepository.Update(reciveCount);
 
+                //Заносим транзакцию в базу
                 var transaction = await repository.Add(transactionEntity);
 
+                //Если транзакция не совершена, производим отмену на счетах
                 if(transaction == null)
                 {
                     senderCount.Count += entityDTO.Sum;
@@ -88,8 +94,6 @@ namespace MicroserviceArch.CountsService.Controllers
 
                     senderCount = await countRepository.Update(senderCount);
                     reciveCount = await countRepository.Update(reciveCount);
-
-                    await rabbitMQ.SendMessageAsync("Возникла ошибка при переводе средств! Повторите попытку позже!", $"TransactionPart{senderCount.ClientId}", configurationSection.Value);
 
                     return BadRequest(new TransactionEntityDTO() { IsSuccessful = false, Notification = "Возникла ошибка при переводе средств! Повторите попытку позже!" });
                 }
@@ -99,8 +103,17 @@ namespace MicroserviceArch.CountsService.Controllers
                 entityDTO.UpdatedAt = transaction.UpdatedAt;
                 entityDTO.Description = transaction.Description;
 
-                await rabbitMQ.SendMessageAsync($"Списание средств. {entityDTO.Description}. Сумма: {entityDTO.Sum}. Баланс: {senderCount.Count}" , $"TransactionPart{senderCount.ClientId}", configurationSection.Value);
-                await rabbitMQ.SendMessageAsync($"Зачисление средств. {entityDTO.Description}. Сумма: {entityDTO.Sum}. Баланс: {reciveCount.Count}", $"TransactionPart{reciveCount.ClientId}", configurationSection.Value);
+                //Отправка уведомления отправителю
+                messageDTO.Message = $"Списание средств. {entityDTO.Description}. Сумма: {entityDTO.Sum}. Баланс: {senderCount.Count}";
+                messageDTO.Type = $"Transaction";
+                messageDTO.ClientID = senderCount.ClientId;
+                await rabbitMQ.SendMessageAsync(messageDTO);
+
+                //Отправка уведомления получателю
+                messageDTO.Message = $"Зачисление средств. {entityDTO.Description}. Сумма: {entityDTO.Sum}. Баланс: {reciveCount.Count}";
+                messageDTO.Type = $"Transaction";
+                messageDTO.ClientID = reciveCount.ClientId;
+                await rabbitMQ.SendMessageAsync(messageDTO);
 
                 return Ok(entityDTO);
             }
@@ -165,5 +178,7 @@ namespace MicroserviceArch.CountsService.Controllers
 
             return Ok(entityDTOs);
         }
+
+
     }
 }
